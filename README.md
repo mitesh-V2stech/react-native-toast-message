@@ -20,7 +20,7 @@ Animated toast message component for React Native.
 ## Install
 
 ```
-yarn add @tientran/react-native-toast-message
+yarn add @zellosoft.com/react-native-toast-message
 ```
 
 ![ToastSuccess](success-toast.gif)
@@ -31,7 +31,7 @@ Render the `Toast` component in your app entry file (along with everything that 
 
 ```js
 // App.jsx
-import Toast from '@tientran/react-native-toast-message';
+import Toast from '@zellosoft.com/react-native-toast-message';
 
 function App(props) {
   return (
@@ -48,7 +48,7 @@ export default App;
 Then use it anywhere in your app (even outside React components), by calling any `Toast` method directly:
 
 ```js
-import Toast from '@tientran/react-native-toast-message';
+import Toast from '@zellosoft.com/react-native-toast-message';
 
 function SomeComponent() {
   React.useEffect(() => {
@@ -247,7 +247,7 @@ const baseToastProps = {
 To have the toast visible on top of the navigation `View` hierarchy, simply render it inside the `NavigationContainer`.
 
 ```js
-import Toast from '@tientran/react-native-toast-message'
+import Toast from '@zellosoft.com/react-native-toast-message'
 import { NavigationContainer } from '@react-navigation/native';
 
 export default function App() {

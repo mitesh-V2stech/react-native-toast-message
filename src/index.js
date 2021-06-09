@@ -72,7 +72,7 @@ const getInitialState = ({
   message: undefined,
   content: undefined,
   leadingIcon: undefined,
-  showLoadingIcon: false,
+  showLoadingIcon: true,
 
   onPress: undefined,
   onCancel: f => f,

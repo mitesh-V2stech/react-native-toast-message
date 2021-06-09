@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import SuccessToast from './components/success';
 import ErrorToast from './components/error';
 import InfoToast from './components/info';
+import Dialog from './components/dialog';
 import { complement } from './utils/arr';
 import { includeKeys } from './utils/obj';
 import { stylePropType } from './utils/prop-types';
@@ -25,6 +26,13 @@ const defaultComponentsConfig = {
   // eslint-disable-next-line react/prop-types
   info: ({ hide, ...rest }) => (
     <InfoToast {...rest} onTrailingIconPress={hide} />
+  ),
+  // eslint-disable-next-line react/prop-types
+  dialog: ({ cancel, ...rest }) => (
+    <Dialog
+		{...rest}
+		onTrailingIconPress={cancel}
+	/>
   )
 };
 
@@ -41,6 +49,7 @@ const getInitialState = ({
   visibilityTime,
   height,
   autoHide,
+  swipeable,
   position,
   type
 }) => ({
@@ -56,11 +65,18 @@ const getInitialState = ({
   visibilityTime,
   autoHide,
 
+  swipeable,
+
   // content
-  text1: undefined,
-  text2: undefined,
+  title: undefined,
+  message: undefined,
+  content: undefined,
+  leadingIcon: undefined,
+  showLoadingIcon: false,
 
   onPress: undefined,
+  onCancel: f => f,
+  onOk: f => f,
   onShow: undefined,
   onHide: undefined
 });
@@ -88,6 +104,14 @@ class Toast extends Component {
     Toast._ref.hide();
   }
 
+  static cancel() {
+    Toast._ref.cancel();
+  }
+
+  static ok() {
+    Toast._ref.ok();
+  }
+
   constructor(props) {
     super(props);
 
@@ -98,6 +122,8 @@ class Toast extends Component {
     this.animate = this.animate.bind(this);
     this.show = this.show.bind(this);
     this.hide = this.hide.bind(this);
+    this.cancel = this.cancel.bind(this);
+    this.ok = this.ok.bind(this);
     this.onLayout = this.onLayout.bind(this);
 
     this.state = {
@@ -171,7 +197,12 @@ class Toast extends Component {
   }
 
   _animateMovement(gesture) {
-    const { position, animation, keyboardVisible } = this.state;
+    const { position, swipeable, animation, keyboardVisible, type } = this.state;
+
+	if (!swipeable || type === 'dialog') {
+		return;
+	}
+
     const { dy } = gesture;
     let value = 1 + dy / 100;
     const start = keyboardVisible && position === 'bottom' ? 2 : 1;
@@ -186,7 +217,12 @@ class Toast extends Component {
   }
 
   _animateRelease(gesture) {
-    const { position, animation, keyboardVisible } = this.state;
+    const { position, animation, keyboardVisible, swipeable, type } = this.state;
+
+	if (!swipeable || type === 'dialog') {
+		return;
+	}
+
     const { dy, vy } = gesture;
 
     const isBottom = position === 'bottom';
@@ -198,9 +234,9 @@ class Toast extends Component {
 
     const treshold = 0.65;
     if (value <= treshold || Math.abs(vy) >= treshold) {
-//       this.hide({
-//         speed: Math.abs(vy) * 3
-//       });
+      this.hide({
+        speed: Math.abs(vy) * 3
+      });
     } else {
       Animated.spring(animation, {
         toValue: keyboardVisible && isBottom ? 2 : 1,
@@ -271,6 +307,46 @@ class Toast extends Component {
       onHide();
     }
   }
+  async cancel({ speed } = {}) {
+    await this._setState((prevState) => ({
+      ...prevState,
+      inProgress: true
+    }));
+    await this.animateHide({
+      speed
+    });
+    this.clearTimer();
+    await this._setState((prevState) => ({
+      ...prevState,
+      isVisible: false,
+      inProgress: false
+    }));
+
+    const { onCancel } = this.state;
+    if (onCancel) {
+      onCancel();
+    }
+  }
+  async ok({ speed } = {}) {
+    await this._setState((prevState) => ({
+      ...prevState,
+      inProgress: true
+    }));
+    await this.animateHide({
+      speed
+    });
+    this.clearTimer();
+    await this._setState((prevState) => ({
+      ...prevState,
+      isVisible: false,
+      inProgress: false
+    }));
+
+    const { onOk } = this.state;
+    if (onOk) {
+      onOk();
+    }
+  }
 
   animateShow = () => {
     const { keyboardVisible, position } = this.state;
@@ -325,18 +401,25 @@ class Toast extends Component {
       ...includeKeys({
         obj: this.state,
         keys: [
-          'position',
           'type',
           'inProgress',
           'isVisible',
-          'text1',
-          'text2',
+          'content',
+          'showLoadingIcon',
+          'leadingIcon',
+          'title',
+          'message',
           'hide',
           'show',
+          'cancel',
+          'ok',
           'onPress'
         ]
       }),
+	  position: type === 'dialog' ? 'bottom' : this.state['position'],
       props: { ...customProps },
+      cancel: this.cancel,
+      ok: this.ok,
       hide: this.hide,
       show: this.show
     });
@@ -376,8 +459,8 @@ class Toast extends Component {
 
   render() {
     const { style } = this.props;
-    const { position, keyboardHeight } = this.state;
-    const baseStyle = this.getBaseStyle(position, keyboardHeight);
+    const { position, keyboardHeight, type } = this.state;
+    const baseStyle = this.getBaseStyle(type === 'dialog' ? 'bottom' : position, keyboardHeight);
 
     return (
       <Animated.View
@@ -399,6 +482,7 @@ Toast.propTypes = {
   keyboardOffset: PropTypes.number,
   visibilityTime: PropTypes.number,
   autoHide: PropTypes.bool,
+  swipeable: PropTypes.bool,
   height: PropTypes.number,
   position: PropTypes.oneOf(['top', 'bottom']),
   type: PropTypes.string
@@ -412,6 +496,7 @@ Toast.defaultProps = {
   keyboardOffset: 15,
   visibilityTime: 4000,
   autoHide: true,
+  swipeable: true,
   height: 60,
   position: 'top',
   type: 'success'

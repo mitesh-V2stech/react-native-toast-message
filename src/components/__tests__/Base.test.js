@@ -13,8 +13,8 @@ describe('test Base component', () => {
     const rootView = queryByTestId('rootView');
     const leadingIcon = queryByTestId('leadingIcon');
     const trailingIcon = queryByTestId('trailingIcon');
-    const text1 = queryByTestId('text1');
-    const text2 = queryByTestId('text2');
+    const title = queryByTestId('title');
+    const message = queryByTestId('message');
 
     expect(rootView).toBeTruthy();
     expect(rootView).toHaveStyle({
@@ -23,8 +23,8 @@ describe('test Base component', () => {
       borderLeftWidth: 5,
       borderLeftColor: colors.alto
     });
-    expect(text1).toBeFalsy();
-    expect(text2).toBeFalsy();
+    expect(title).toBeFalsy();
+    expect(message).toBeFalsy();
     expect(leadingIcon).toBeFalsy();
     expect(trailingIcon).toBeTruthy();
     expect(trailingIcon.children[0].props.source).toBe(icons.close);
@@ -43,15 +43,15 @@ describe('test Base component', () => {
     expect(trailingIcon.children[0].props.source).toBe(mockIcon);
   });
 
-  it('renders text1 and text2', () => {
+  it('renders title and message', () => {
     const t1 = 'foo';
     const t2 = 'bar';
-    const { queryByTestId } = render(<Base text1={t1} text2={t2} />);
-    const text1 = queryByTestId('text1');
-    const text2 = queryByTestId('text2');
+    const { queryByTestId } = render(<Base title={t1} message={t2} />);
+    const title = queryByTestId('title');
+    const message = queryByTestId('message');
 
-    expect(text1.children[0]).toBe(t1);
-    expect(text2.children[0]).toBe(t2);
+    expect(title.children[0]).toBe(t1);
+    expect(message.children[0]).toBe(t2);
   });
 
   it('fires onPress', () => {
@@ -175,7 +175,7 @@ describe('test Base component', () => {
     expect(contentContainer).toHaveStyle(mockStyle);
   });
 
-  it('sets custom text1 and text2 style', () => {
+  it('sets custom title and message style', () => {
     const mockStyle1 = {
       fontSize: 10
     };
@@ -184,41 +184,41 @@ describe('test Base component', () => {
     };
     const { queryByTestId } = render(
       <Base
-        text1='Foo'
-        text2='Bar'
-        text1Style={mockStyle1}
-        text2Style={mockStyle2}
+        title='Foo'
+        message='Bar'
+        titleStyle={mockStyle1}
+        messageStyle={mockStyle2}
       />
     );
-    const text1 = queryByTestId('text1');
-    const text2 = queryByTestId('text2');
+    const title = queryByTestId('title');
+    const message = queryByTestId('message');
 
-    expect(text1).toHaveStyle(mockStyle1);
-    expect(text2).toHaveStyle(mockStyle2);
+    expect(title).toHaveStyle(mockStyle1);
+    expect(message).toHaveStyle(mockStyle2);
   });
 
   it('renders default number of lines', () => {
-    const { queryByTestId } = render(<Base text1='Foo' text2='Bar' />);
-    const text1 = queryByTestId('text1');
-    const text2 = queryByTestId('text2');
+    const { queryByTestId } = render(<Base title='Foo' message='Bar' />);
+    const title = queryByTestId('title');
+    const message = queryByTestId('message');
 
-    expect(text1.props.numberOfLines).toBe(1);
-    expect(text2.props.numberOfLines).toBe(2);
+    expect(title.props.numberOfLines).toBe(1);
+    expect(message.props.numberOfLines).toBe(2);
   });
 
   it('sets custom number of lines', () => {
     const { queryByTestId } = render(
       <Base
-        text1='Foo'
-        text2='Bar'
-        text1NumberOfLines={2}
-        text2NumberOfLines={3}
+        title='Foo'
+        message='Bar'
+        titleNumberOfLines={2}
+        messageNumberOfLines={3}
       />
     );
-    const text1 = queryByTestId('text1');
-    const text2 = queryByTestId('text2');
+    const title = queryByTestId('title');
+    const message = queryByTestId('message');
 
-    expect(text1.props.numberOfLines).toBe(2);
-    expect(text2.props.numberOfLines).toBe(3);
+    expect(title.props.numberOfLines).toBe(2);
+    expect(message.props.numberOfLines).toBe(3);
   });
 });

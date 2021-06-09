@@ -42,12 +42,12 @@ export default StyleSheet.create({
     width: 9,
     height: 9
   },
-  text1: {
+  title: {
     fontSize: 12,
     fontWeight: 'bold',
     marginBottom: 3
   },
-  text2: {
+  message: {
     fontSize: 10,
     color: colors.dustyGray
   }

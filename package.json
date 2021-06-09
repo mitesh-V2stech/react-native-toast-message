@@ -15,21 +15,16 @@
       "prettier --write",
       "eslint"
     ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
+  }, 
   "keywords": [
     "react-native",
     "toast"
   ],
-  "author": "Calin Tamas <calinntamas@gmail.com>",
+  "author": "Tien Tran <tientran0019@gmail.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/calintamas/react-native-toast-message.git"
+    "url": "git+https://github.com/tientran0019/react-native-toast-message.git"
   },
   "devDependencies": {
     "@testing-library/jest-native": "^4.0.1",

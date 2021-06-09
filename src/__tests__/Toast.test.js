@@ -13,15 +13,15 @@ function setup(props) {
   };
   const utils = render(<Toast ref={ref} autoHide={false} {...props} />);
   const getAnimatedView = () => utils.queryByTestId('animatedView');
-  const getText1 = () => utils.queryByTestId('text1');
-  const getText2 = () => utils.queryByTestId('text2');
+  const getTitle = () => utils.queryByTestId('title');
+  const getMessage = () => utils.queryByTestId('message');
   const getRootView = () => utils.queryByTestId('rootView');
 
   return {
     ref,
     getRootView,
-    getText1,
-    getText2,
+    getTitle,
+    getMessage,
     getAnimatedView,
     ...utils
   };
@@ -34,21 +34,21 @@ function getVerticalOffset(reactElement) {
 describe('test Toast behavior', () => {
   describe('test API', () => {
     it('becomes visible when show() is called, hides when hide() is called', async () => {
-      const { ref, getText1, getText2, getAnimatedView } = setup();
+      const { ref, getTitle, getMessage, getAnimatedView } = setup();
       let animatedView = getAnimatedView();
 
-      expect(getText1()).toBeFalsy();
+      expect(getTitle()).toBeFalsy();
       // Toast View is pushed off screen, on the Y axis
       expect(getVerticalOffset(animatedView) < 0).toBe(true);
 
       await act(async () => {
         await ref.current.show({
-          text1: 'Hello',
-          text2: 'Test'
+          title: 'Hello',
+          message: 'Test'
         });
       });
-      await waitFor(() => getText1());
-      await waitFor(() => getText2());
+      await waitFor(() => getTitle());
+      await waitFor(() => getMessage());
       animatedView = getAnimatedView();
       expect(getVerticalOffset(animatedView) < 0).toBe(false);
 

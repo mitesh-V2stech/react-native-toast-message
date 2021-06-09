@@ -1,3 +1,9 @@
+About Fork
+-------
+- Disable Swipe Gestures by adding prop: `swipeable = false`
+- Created a completely new type - `dialog`, building the layout from scratch. To push a message dialog to the user.
+- Added new methods: `Toast.ok()` and `Toast.cancel()` along with `onOk: () => {}` and `onCancel: () => {}`
+
 # react-native-toast-message
 
 [![npm version](https://img.shields.io/npm/v/react-native-toast-message)](https://www.npmjs.com/package/react-native-toast-message)
@@ -14,7 +20,7 @@ Animated toast message component for React Native.
 ## Install
 
 ```
-yarn add react-native-toast-message
+yarn add @tientran/react-native-toast-message
 ```
 
 ![ToastSuccess](success-toast.gif)
@@ -25,7 +31,7 @@ Render the `Toast` component in your app entry file (along with everything that 
 
 ```js
 // App.jsx
-import Toast from 'react-native-toast-message';
+import Toast from '@tientran/react-native-toast-message';
 
 function App(props) {
   return (
@@ -42,13 +48,13 @@ export default App;
 Then use it anywhere in your app (even outside React components), by calling any `Toast` method directly:
 
 ```js
-import Toast from 'react-native-toast-message';
+import Toast from '@tientran/react-native-toast-message';
 
 function SomeComponent() {
   React.useEffect(() => {
     Toast.show({
-      text1: 'Hello',
-      text2: 'This is some something 👋'
+      title: 'Hello',
+      message: 'This is some something 👋'
     });
   }, []);
 
@@ -67,10 +73,10 @@ If only one value is shown, that's the default.
 
 ```js
 Toast.show({
-  type: 'success | error | info',
+  type: 'success | error | info | dialog',
   position: 'top | bottom',
-  text1: 'Hello',
-  text2: 'This is some something 👋',
+  title: 'Hello',
+  message: 'This is some something 👋',
   visibilityTime: 4000,
   autoHide: true,
   topOffset: 30,
@@ -78,14 +84,49 @@ Toast.show({
   onShow: () => {},
   onHide: () => {}, // called when Toast hides (if `autoHide` was set to `true`)
   onPress: () => {},
+  onOk: () => {},
+  onCancel: () => {},
   props: {} // any custom props passed to the Toast component
 });
-```
+``` 
+```js
+Toast.show({
+  type: 'dialog', 
+  title: 'Hello',
+  message: 'This is some something 👋',
+  showLoadingIcon: false,
+  content: (
+    <View
+      style={{
 
+      }}
+    >
+      { /* Any component */ }
+    </View>
+  ),
+  visibilityTime: 4000,
+  autoHide: true, 
+  onShow: () => {},
+  onHide: () => {},  
+  onPress: () => {},
+  onOk: () => {},
+  onCancel: () => {}, 
+});
+```
 ### `hide()`
 
 ```js
 Toast.hide();
+```
+### `ok()`
+
+```js
+Toast.ok();
+```
+### `cancel()`
+
+```js
+Toast.cancel();
 ```
 
 ## props
@@ -94,7 +135,7 @@ Props that can be set on the `Toast` instance. They act as defaults for all Toas
 
 ```js
 const props = {
-  type: 'success | error | info',
+  type: 'success | error | info | dialog',
   position: 'top' | 'bottom',
   visibilityTime: Number,
   autoHide: Boolean,
@@ -103,7 +144,13 @@ const props = {
   keyboardOffset: Number,
   config: Object,
   style: ViewStyle,
-  height: Number
+  height: Number,
+  swipeable: Boolean, // Disable Swipe Gestures
+
+  // for dialog type
+  content: Component, // Replace title and message with itself
+  leadingIcon: Component, 
+  showLoadingIcon: Boolean,
 };
 ```
 
@@ -124,17 +171,17 @@ const toastConfig = {
     overwrite 'success' type, 
     modifying the existing `BaseToast` component
   */
-  success: ({ text1, props, ...rest }) => (
+  success: ({ title, props, ...rest }) => (
     <BaseToast
       {...rest}
       style={{ borderLeftColor: 'pink' }}
       contentContainerStyle={{ paddingHorizontal: 15 }}
-      text1Style={{
+      titleStyle={{
         fontSize: 15,
         fontWeight: '400'
       }}
-      text1={text1}
-      text2={props.uuid}
+      title={title}
+      message={props.uuid}
     />
   ),
   
@@ -142,9 +189,9 @@ const toastConfig = {
     or create a completely new type - `my_custom_type`,
     building the layout from scratch
   */
-  my_custom_type: ({ text1, props, ...rest }) => (
+  my_custom_type: ({ title, props, ...rest }) => (
     <View style={{ height: 60, width: '100%', backgroundColor: 'tomato' }}>
-      <Text>{text1}</Text>
+      <Text>{title}</Text>
     </View>
   )
 };
@@ -176,8 +223,8 @@ Available `props` on `BaseToast`:
 const baseToastProps = {
   leadingIcon: ImageSource,
   trailingIcon: ImageSource,
-  text1: String,
-  text2: String,
+  title: String,
+  message: String,
   onPress: Function,
   onLeadingIconPress: Function,
   onTrailingIconPress: Function,
@@ -187,9 +234,9 @@ const baseToastProps = {
   leadingIconStyle: ViewStyle,
   trailingIconStyle: ViewStyle,
   contentContainerStyle: ViewStyle,
-  text1Style: ViewStyle,
-  text2Style: ViewStyle,
-  activeOpacity: Number
+  titleStyle: ViewStyle,
+  messageStyle: ViewStyle,
+  activeOpacity: Number, 
 };
 ```
 
@@ -200,7 +247,7 @@ const baseToastProps = {
 To have the toast visible on top of the navigation `View` hierarchy, simply render it inside the `NavigationContainer`.
 
 ```js
-import Toast from 'react-native-toast-message'
+import Toast from '@tientran/react-native-toast-message'
 import { NavigationContainer } from '@react-navigation/native';
 
 export default function App() {

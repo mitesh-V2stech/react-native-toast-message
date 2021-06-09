@@ -1,5 +1,5 @@
 {
-  "name": "react-native-toast-message",
+  "name": "@tientran/react-native-toast-message",
   "version": "1.4.9",
   "description": "Toast message component for React Native",
   "main": "index.js",
@@ -18,7 +18,8 @@
   }, 
   "keywords": [
     "react-native",
-    "toast"
+    "toast",
+    "dialog"
   ],
   "author": "Tien Tran <tientran0019@gmail.com>",
   "license": "MIT",
@@ -40,5 +41,9 @@
   },
   "dependencies": {
     "prop-types": "^15.7.2"
-  }
+  },
+  "peerDependencies": {
+		"react": ">=16.13.1",
+		"react-native": ">=0.63.0" 
+	}
 }

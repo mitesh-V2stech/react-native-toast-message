@@ -1,7 +1,7 @@
 import React from 'react';
 import { ViewStyle, TextStyle, ImageSourcePropType } from 'react-native'
 
-declare module 'react-native-toast-message' {
+declare module '@tientran/react-native-toast-message' {
   interface AnyObject {
     [key: string]: any;
   }
@@ -11,8 +11,8 @@ declare module 'react-native-toast-message' {
   export interface BaseToastProps {
     leadingIcon?: ImageSourcePropType,
     trailingIcon?: ImageSourcePropType,
-    text1?: string,
-    text2?: string,
+    title?: string,
+    message?: string,
     onPress?: () => void,
     onTrailingIconPress?: () => void,
     onLeadingIconPress?: () => void,
@@ -22,11 +22,11 @@ declare module 'react-native-toast-message' {
     leadingIconStyle?: ViewStyle,
     trailingIconStyle?: ViewStyle,
     contentContainerStyle?: ViewStyle,
-    text1Style?: TextStyle,
-    text2Style?: TextStyle,
+    titleStyle?: TextStyle,
+    messageStyle?: TextStyle,
     activeOpacity?: number,
-    text1NumberOfLines: number,
-    text2NumberOfLines: number,
+    titleNumberOfLines: number,
+    messageNumberOfLines: number,
   }
   export const BaseToast: React.FC<BaseToastProps>
 
@@ -48,8 +48,8 @@ declare module 'react-native-toast-message' {
     static show(options: {
       type: string,
       position?: ToastPosition,
-      text1?: string,
-      text2?: string,
+      title?: string,
+      message?: string,
       visibilityTime?: number,
       autoHide?: boolean,
       topOffset?: number,
@@ -57,10 +57,14 @@ declare module 'react-native-toast-message' {
       props?: AnyObject,
       onShow?: () => void,
       onHide?: () => void,
+      onOk?: () => void,
+      onCancel?: () => void,
       onPress?: () => void
     }): void;
 
     static hide(): void;
+    static ok(): void;
+    static cancel(): void;
 
     static setRef(ref: any): any;
   }

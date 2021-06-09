@@ -9,7 +9,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { View, ActivityIndicator, Text, Dimensions, TouchableOpacity } from 'react-native';
+import { View, ActivityIndicator, Text, Dimensions, TouchableOpacity, Modal } from 'react-native';
 
 import Icon from './icon';
 import { icons } from '../assets';
@@ -58,95 +58,108 @@ const Dialog = (props) => {
 		return null;
 	}
 	return (
-		<View
-			style={{
-				justifyContent: 'center',
-				alignItems: 'center',
-				zIndex: 9999,
-				backgroundColor: 'rgba(0, 0, 0, 0.6)',
-				height: height + 100,
-				width: width,
-				padding: 15,
-				position: 'absolute',
-				bottom: -100,
-			}}
+		<Modal
+			visible
+			transparent
 		>
 			<View
 				style={{
-					width: '100%',
-					backgroundColor: '#fff',
-					borderRadius: 8,
-					// flexDirection: 'row',
-					padding: 20,
-					paddingVertical: 30,
-					marginBottom: 100,
+					justifyContent: 'center',
+					alignItems: 'center',
 					zIndex: 9999,
-					position: 'relative',
+					backgroundColor: 'rgba(0, 0, 0, 0.6)',
+					height: height + 100,
+					width: width,
+					padding: 15,
+					position: 'absolute',
+					bottom: -100,
 				}}
 			>
-				{trailingIcon && (
-					<TouchableOpacity
-						testID='trailingIcon'
-						style={{
-							position: 'absolute',
-							right: 15,
-							top: 15,
-						}}
-						onPress={onTrailingIconPress}
-						activeOpacity={onTrailingIconPress ? activeOpacity : 1}>
-						<Icon
-							style={{ ...styles.trailingIcon, ...trailingIconStyle }}
-							source={trailingIcon}
-						/>
-					</TouchableOpacity>
-				)}
-
-				{
-					content ||
-					<>
-						{
-							showLoadingIcon &&
-							<ActivityIndicator
-								size="large"
-							/>
-						}
-						{
-							leadingIcon
-						}
-						<View
+				<View
+					style={{
+						width: '100%',
+						backgroundColor: '#fff',
+						borderRadius: 8,
+						// flexDirection: 'row',
+						padding: 20,
+						paddingVertical: 30,
+						marginBottom: 100,
+						zIndex: 9999,
+						position: 'relative',
+					}}
+				>
+					{trailingIcon && (
+						<TouchableOpacity
+							testID='trailingIcon'
 							style={{
-								marginTop: 20,
+								position: 'absolute',
+								right: 0,
+								top: 0,
+								padding: 15,
 							}}
-						>
-							<Text
+							onPress={onTrailingIconPress}
+							activeOpacity={onTrailingIconPress ? activeOpacity : 1}>
+							<Icon
 								style={[
 									{
-										textAlign: 'center',
-										marginBottom: 10,
-										fontSize: 16,
-										fontWeight: 'bold',
+										width: 10,
+										height: 10,
 									},
-									titleStyle,
+									trailingIconStyle,
 								]}
+								source={trailingIcon}
+							/>
+						</TouchableOpacity>
+					)}
+
+					{
+						content ||
+						<>
+							{
+								showLoadingIcon &&
+								<ActivityIndicator
+									size="large"
+									color="blue"
+								/>
+							}
+							{
+								leadingIcon
+							}
+							<View
+								style={{
+									marginTop: 20,
+								}}
 							>
-								{title}
-							</Text>
-							<Text
-								style={[
-									{
-										textAlign: 'center',
-										fontSize: 14,
-									},
-									messageStyle,
-								]}
-							>
-								{message}
-							</Text>
-						</View>
-					</>
-				}
+								<Text
+									style={[
+										{
+											textAlign: 'center',
+											marginBottom: 10,
+											fontSize: 16,
+											fontWeight: 'bold',
+										},
+										titleStyle,
+									]}
+								>
+									{title}
+								</Text>
+								<Text
+									style={[
+										{
+											textAlign: 'center',
+											fontSize: 14,
+										},
+										messageStyle,
+									]}
+								>
+									{message}
+								</Text>
+							</View>
+						</>
+					}
+				</View>
 			</View>
-		</View>
+		</Modal>
 	);
 };
 

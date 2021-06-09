@@ -198,9 +198,9 @@ class Toast extends Component {
 
     const treshold = 0.65;
     if (value <= treshold || Math.abs(vy) >= treshold) {
-      this.hide({
-        speed: Math.abs(vy) * 3
-      });
+//       this.hide({
+//         speed: Math.abs(vy) * 3
+//       });
     } else {
       Animated.spring(animation, {
         toValue: keyboardVisible && isBottom ? 2 : 1,

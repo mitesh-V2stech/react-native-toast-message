@@ -8,8 +8,16 @@
     "lint": "./node_modules/.bin/eslint . --ext=jsx --ext=js",
     "lint-staged": "./node_modules/.bin/lint-staged",
     "prettier": "./node_modules/.bin/prettier . --write",
-    "test": "./node_modules/.bin/jest"
-  },
+    "test": "./node_modules/.bin/jest",
+    "-------------------------------- TOOL ----": "----",
+    "versionup": "standard-version -r patch",
+    "versionup:minor": "standard-version -r minor",
+    "versionup:major": "standard-version -r major",
+    "versionup:init": "standard-version --first-release",
+    "-------------------------------- PROD ----": "----",
+    "release-beta": "npm publish --dist-tag --tag beta",
+    "release": "npm publish --dist-tag"
+  }, 
   "lint-staged": {
     "**/*.js": [
       "prettier --write",

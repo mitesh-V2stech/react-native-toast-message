@@ -461,8 +461,10 @@ class Toast extends Component {
     const { style } = this.props;
     const { position, keyboardHeight, type } = this.state;
     const baseStyle = this.getBaseStyle(type === 'dialog' ? 'bottom' : position, keyboardHeight);
+    const { position, keyboardHeight, isVisible } = this.state;
 
     return (
+      isVisible && (
       <Animated.View
         testID='animatedView'
         onLayout={this.onLayout}
@@ -470,6 +472,7 @@ class Toast extends Component {
         {...this.panResponder.panHandlers}>
         {this.renderContent(this.props)}
       </Animated.View>
+      )
     );
   }
 }
